@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter - Graduated</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body { margin:0; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; color:#0f172a; background:#f8fafc; }
+        .letter-wrap { min-height:100vh; position:relative; display:flex; flex-direction:column; }
+        .letter-topbar { position:sticky; top:0; background:linear-gradient(90deg,#1e3a8a,#2742a2); color:#fff; padding:18px 20px; display:flex; align-items:center; justify-content:center; }
+        .letter-topbar .left-logo, .letter-topbar .right-logo { position:absolute; top:10px; width:72px; height:72px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+        .letter-topbar .left-logo { left:16px; }
+        .letter-topbar .right-logo { right:16px; }
+        .letter-topbar .uni { font-weight:800; font-size:30px; line-height:1.15; text-align:center; letter-spacing:.3px; }
+        .letter-topbar .addr { font-size:14px; opacity:.95; text-align:center; margin-top:4px; }
+
+        .letter-container { max-width:960px; width:100%; margin:32px auto; padding:0 20px; }
+        .letter-card-modern { background:#ffffff; border-radius:20px; box-shadow: 0 20px 60px rgba(2,6,23,.08), 0 6px 20px rgba(2,6,23,.06); padding:32px 28px; border:1px solid #e5e7eb; }
+        .letter-body p { font-size:20px; line-height:1.75; margin:16px 0; color:#111827; }
+        .letter-body p.lead { font-size:22px; font-weight:600; margin-top:0; }
+        .letter-sign { margin-top:36px; }
+        .letter-sign strong { font-size:20px; }
+
+        .letter-actions { position:sticky; bottom:0; padding:18px 0; background:linear-gradient(180deg, rgba(248,250,252,0.9), rgba(248,250,252,1)); backdrop-filter: blur(4px); border-top:1px solid #e5e7eb; }
+        .letter-actions .next { display:inline-block; background:linear-gradient(90deg,#1e3a8a,#0f1f58); color:#fff; border:none; padding:16px 42px; font-size:18px; font-weight:800; border-radius:999px; cursor:pointer; box-shadow:0 12px 30px rgba(30,58,138,.35); transition:.2s transform,.2s box-shadow; }
+        .letter-actions .next:hover { transform: translateY(-2px); box-shadow:0 18px 40px rgba(30,58,138,.45); }
+
+        @media (max-width: 640px){
+            .letter-topbar .uni { font-size:22px; }
+            .letter-topbar .left-logo,.letter-topbar .right-logo{ width:58px; height:58px; top:8px; }
+            .letter-card-modern{ padding:22px 18px; border-radius:16px; }
+            .letter-body p{ font-size:18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="letter-wrap">
+        <div class="letter-topbar">
+            <img src="../logo.png" alt="CAS" class="left-logo"/>
+            <div>
+                <div class="uni">SAMAR STATE UNIVERSITY</div>
+                <div class="addr">Arteche Blvd. Catbalogan City, 6700 • ssu.edu.ph</div>
+            </div>
+            <img src="../ssulogo.png" alt="SSU" class="right-logo"/>
+        </div>
+
+        <div class="letter-container">
+            <div class="letter-card-modern">
+            <div class="letter-body">
+                <p class="lead">Dear Graduate,</p>
+                <p class="lead">Tradesmen Greetings!</p>
+                <p>The College of Arts And Sciences, Samar State University, Catbalogan City is presently conducting a TRACER Survey of its graduates. Please complete this questionnaire truthfully and accurately. Your responses will be used to assess graduates’ employability and to improve our curriculum thus be globally competitive. Samar State University wants to keep in touch with you to foster relations and partnership. Your answers to this survey will be treated with confidentiality.</p>
+                <p>Thank you so much!</p>
+                <div class="letter-sign">
+                    <p><strong>Florabelle B. Patosa, PhD</strong><br/>Dean, College of Arts and Sciences</p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="letter-actions">
+            <button class="next" onclick="navigateTo('graduated-form')">NEXT</button>
+        </div>
+    </div>
+    <script>
+        function navigateTo(page){ window.location.href = page + '.html'; }
+        function navigateBack(){ window.history.back(); }
+    </script>
+</body>
+</html>

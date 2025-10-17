@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Supabase Connection Test</h1>
+    <div id="status">Testing connection...</div>
+    <div id="results"></div>
+
+    <script>
+        const supabaseUrl = 'https://mcdkeoomndrwrapcrmch.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jZGtlb29tbmRyd3JhcGNybWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxOTM2MDAsImV4cCI6MjA3Mjc2OTYwMH0.QOrm-xmC7x_NVdLnVeo3hEH2MLoZqa5oRG9kjR79F5g';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        async function testConnection() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                // Test basic connection
+                statusDiv.textContent = 'Testing Supabase connection...';
+                
+                // Test profiles table
+                const { data: profiles, error: profilesError } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .limit(5);
+                
+                if (profilesError) {
+                    throw profilesError;
+                }
+                
+                statusDiv.textContent = '✅ Supabase connection successful!';
+                resultsDiv.innerHTML = `
+                    <h3>Connection Test Results:</h3>
+                    <p><strong>Profiles found:</strong> ${profiles.length}</p>
+                    <h4>Sample Profiles:</h4>
+                    <ul>
+                        ${profiles.map(p => `<li>${p.full_name} (${p.user_type}) - ${p.program}</li>`).join('')}
+                    </ul>
+                `;
+                
+                // Test employment records
+                const { data: employment, error: employmentError } = await supabase
+                    .from('employment_records')
+                    .select('*')
+                    .limit(3);
+                
+                if (!employmentError) {
+                    resultsDiv.innerHTML += `
+                        <h4>Employment Records:</h4>
+                        <p><strong>Records found:</strong> ${employment.length}</p>
+                    `;
+                }
+                
+            } catch (error) {
+                statusDiv.textContent = '❌ Connection failed!';
+                resultsDiv.innerHTML = `
+                    <h3>Error Details:</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Code:</strong> ${error.code || 'N/A'}</p>
+                    <p><strong>Details:</strong> ${error.details || 'N/A'}</p>
+                `;
+            }
+        }
+        
+        // Run test when page loads
+        testConnection();
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Upload Fix</title>
+</head>
+<body>
+    <h1>Test Profile Picture Upload</h1>
+    
+    <div>
+        <label for="test-picture">Select Picture:</label>
+        <input type="file" id="test-picture" accept="image/*" />
+        <button onclick="testUpload()">Test Upload</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script>
+        // Test upload function
+        async function testUpload() {
+            const fileInput = document.getElementById('test-picture');
+            const resultDiv = document.getElementById('result');
+            
+            if (!fileInput.files[0]) {
+                resultDiv.innerHTML = '<p style="color: red;">Please select a file first</p>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            resultDiv.innerHTML = '<p>Testing upload...</p>';
+            
+            try {
+                // Check if Supabase client exists
+                if (typeof supabaseClient === 'undefined') {
+                    resultDiv.innerHTML = '<p style="color: red;">Supabase client not found. Make sure you\'re on the main page.</p>';
+                    return;
+                }
+                
+                // Check authentication
+                const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+                if (authError || !user) {
+                    resultDiv.innerHTML = '<p style="color: red;">Not authenticated. Please log in first.</p>';
+                    return;
+                }
+                
+                resultDiv.innerHTML += `<p>User authenticated: ${user.email}</p>`;
+                
+                // Generate filename
+                const fileExt = file.name.split('.').pop();
+                const fileName = `test_${Date.now()}_${Math.random().toString(36).substr(2, 8)}.${fileExt}`;
+                
+                resultDiv.innerHTML += `<p>Uploading file: ${fileName}</p>`;
+                
+                // Upload file
+                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    .from('profile-pictures')
+                    .upload(fileName, file);
+                
+                if (uploadError) {
+                    resultDiv.innerHTML += `<p style="color: red;">Upload error: ${uploadError.message}</p>`;
+                    console.error('Upload error:', uploadError);
+                    return;
+                }
+                
+                // Get public URL
+                const { data: urlData } = supabaseClient.storage
+                    .from('profile-pictures')
+                    .getPublicUrl(fileName);
+                
+                resultDiv.innerHTML += `<p style="color: green;">Upload successful!</p>`;
+                resultDiv.innerHTML += `<p>File URL: <a href="${urlData.publicUrl}" target="_blank">${urlData.publicUrl}</a></p>`;
+                
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Test upload error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+

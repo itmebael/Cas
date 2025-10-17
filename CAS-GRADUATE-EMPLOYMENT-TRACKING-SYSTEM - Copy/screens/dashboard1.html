@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduating Student Dashboard</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* Ensure this standalone page shows even if global .screen hides it */
+        .screen { display:block !important; }
+        /* Modern dashboard styling */
+        .main-interface { background:#ffffff; }
+        .background-container, .dash-yellow-tint { display:none !important; }
+        body { background:#ffffff; }
+        .grad-header { display:flex; align-items:center; justify-content:space-between; padding:20px; background:linear-gradient(90deg,#1e3a8a,#2742a2); color:#fff; border-radius:8px 8px 0 0; }
+        .grad-header img { width:64px; height:64px; object-fit:contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+        .grad-title { font-size:24px; font-weight:800; text-align:center; flex:1; margin:0 20px; }
+        .graduating-dashboard-card { background:#fff; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,.1); margin:20px; }
+        .grad-profile { display:flex; padding:30px; border-bottom:1px solid #e5e7eb; }
+        .grad-profile-left { margin-right:30px; }
+        .profile-avatar { width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid #1e3a8a; }
+        .profile-name { font-size:24px; font-weight:700; color:#1e3a8a; margin-bottom:8px; }
+        .profile-meta { font-size:16px; color:#6b7280; margin-bottom:4px; }
+        .status-badge { display:inline-block; padding:6px 12px; border-radius:20px; font-size:14px; font-weight:600; }
+        .status-pending { background:#fef3c7; color:#d97706; }
+        .grad-controls { padding:20px; display:flex; gap:12px; align-items:center; }
+        .form-input { flex:1; padding:12px; border:1px solid #d1d5db; border-radius:6px; font-size:16px; }
+        .btn { padding:12px 24px; border:none; border-radius:6px; font-weight:600; cursor:pointer; }
+        .btn-secondary { background:#6b7280; color:#fff; }
+        .btn-secondary:hover { background:#4b5563; }
+        .graduating-students-section { padding:20px; }
+        .graduating-students-section h4 { font-size:20px; font-weight:700; color:#1e3a8a; margin-bottom:16px; }
+        .students-list { display:grid; gap:12px; }
+    </style>
+</head>
+<body>
+<div id="dashboard1-screen" class="screen">
+    <div class="main-interface">
+        <div class="background-container">
+            <img class="university-building" alt="University building" src="../background1.jpg" />
+        </div>
+        <div class="graduating-dashboard-card">
+            <div class="grad-header">
+                <img src="../logo.png" alt="CAS"/>
+                <div class="grad-title">Graduating Student Dashboard</div>
+                <img src="../ssulogo.png" alt="SSU"/>
+            </div>
+            <div class="grad-profile">
+                <div class="grad-profile-left">
+                    <img id="graduating-profile-picture-display" src="" alt="Profile" class="profile-avatar" />
+                </div>
+                <div class="grad-profile-right">
+                    <div id="graduating-profile-name" class="profile-name">Name: N/A</div>
+                    <div id="graduating-profile-student-id" class="profile-meta">Student ID: N/A</div>
+                    <div id="graduating-profile-program" class="profile-meta">Program: N/A</div>
+                    <div id="graduating-profile-expected-graduation" class="profile-meta">Expected Graduation: N/A</div>
+                    <div id="graduating-verification-status" class="status-badge status-pending">Pending</div>
+                </div>
+            </div>
+            <div class="grad-controls">
+                <input id="search-graduating-students" class="form-input" placeholder="Search graduating students..." />
+                <select id="graduating-program-filter" class="form-input">
+                    <option value="">All Programs</option>
+                    <option value="BSIS">BSIS</option>
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSS">BSS</option>
+                    <option value="BSPSYCH">BSPSYCH</option>
+                </select>
+                <button class="btn btn-secondary" onclick="filterGraduatingStudents()">Filter</button>
+            </div>
+            <div class="graduating-students-section">
+                <h4>Graduating Students</h4>
+                <div id="graduating-students-list" class="students-list">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://mcdkeoomndrwrapcrmch.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jZGtlb29tbmRyd3JhcGNybWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxOTM2MDAsImV4cCI6MjA3Mjc2OTYwMH0.QOrm-xmC7x_NVdLnVeo3hEH2MLoZqa5oRG9kjR79F5g";
+    
+    // Initialize Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Load graduating students data
+    async function loadGraduatingStudents() {
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_type', 'graduating')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const studentsList = document.getElementById('graduating-students-list');
+            if (studentsList) {
+                studentsList.innerHTML = '';
+                
+                data.forEach(student => {
+                    const studentItem = document.createElement('div');
+                    studentItem.className = 'student-item';
+                    studentItem.innerHTML = `
+                        <img src="${student.profile_picture || '../logo.png'}" alt="Profile" class="student-avatar">
+                        <div class="student-info">
+                            <div class="student-name">${student.full_name || 'N/A'}</div>
+                            <div class="student-details">
+                                ${student.program || 'N/A'} • ${student.graduation_year || 'N/A'} • ${student.email || 'N/A'}
+                            </div>
+                        </div>
+                        <div class="status-badge ${student.verification_status === 'verified' ? 'status-verified' : 'status-pending'}">
+                            ${student.verification_status || 'Pending'}
+                        </div>
+                    `;
+                    studentsList.appendChild(studentItem);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading graduating students:', error);
+        }
+    }
+
+    // Standalone dashboard functionality
+    function filterGraduatingStudents() {
+        console.log('Filtering graduating students...');
+        // Add your filtering logic here
+    }
+
+    // Load data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadGraduatingStudents();
+    });
+    </script>
+</body>
+</html>

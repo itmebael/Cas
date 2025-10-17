@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduate Tracer Form - Welcome</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .welcome-bg {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(120deg, #2b3990 0 40%, #f7f700 40% 100%);
+        }
+         /* Header text positioned at top center */
+         .header-text {
+             position: absolute;
+             top: 60px;
+             left: 50%;
+             transform: translateX(-50%);
+             text-align: center;
+             z-index: 50;
+             width: 100%;
+         }
+         .header-text .univ {
+             font-size: 2.8rem;
+             font-weight: 900;
+             color: #000000;
+             margin-bottom: 12px;
+             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+             letter-spacing: 1px;
+         }
+         .header-text .address {
+             font-size: 1.3rem;
+             color: #000000;
+             margin-bottom: 8px;
+             font-weight: 600;
+         }
+         .header-text .motto {
+             font-size: 1.2rem;
+             color: #000000;
+             letter-spacing: 2px;
+             font-weight: 700;
+         }
+         
+        /* Main content positioned on the right side */
+        .main-content {
+            position: absolute;
+            top: 56%;
+            right: 110px;
+            transform: translateY(-50%);
+            text-align: left;
+            z-index: 50;
+            max-width: 560px;
+        }
+        .main-content .title {
+            font-size: 5rem;
+             font-weight: 900;
+             color: #1e3a8a;
+             line-height: 0.9;
+             margin-bottom: 30px;
+             letter-spacing: 3px;
+             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+         }
+        .main-content .college {
+            font-size: 1.6rem;
+             color: #1e3a8a;
+            margin-bottom: 50px;
+             font-weight: 600;
+             letter-spacing: 1px;
+         }
+         .main-content .next-btn {
+             font-size: 2.2rem;
+             font-weight: 900;
+             color: white;
+             background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+             border: none;
+             border-radius: 50px;
+             padding: 20px 80px;
+             cursor: pointer;
+             box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+             transition: all 0.3s ease;
+             text-transform: uppercase;
+             letter-spacing: 3px;
+         }
+         .main-content .next-btn:hover {
+             background: linear-gradient(135deg, #1e40af, #2563eb);
+             transform: translateY(-3px);
+             box-shadow: 0 12px 35px rgba(30, 58, 138, 0.5);
+         }
+         .main-content .next-btn:active {
+             transform: translateY(-1px);
+             box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+         }
+        .background1 {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+        .yellow-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 2;
+        }
+        .box1 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 540px;
+            height: auto;
+            transform: none;
+            z-index: 5; /* overlay above box2 */
+        }
+        .box2 {
+             position: absolute;
+            left: 50%;
+            top: 0;
+            width: 988.87px;
+            height: 953.46px;
+            transform: translateX(-100%);
+            z-index: 4; /* below box1 */
+         }
+        .circle-img {
+            position: absolute;
+            left: 23px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 406px; /* 609 / 1.5 */
+            height: 385px; /* 578 / 1.5 */
+            z-index: 5;
+        }
+        .grad-img {
+            position: absolute;
+            left: 55px; /* centered inside the 406px circle at left 23px */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 342px; /* 513 / 1.5 */
+            height: 321px; /* 482 / 1.5 */
+            z-index: 6;
+        }
+         /* University logos */
+         .welcome-bg .logo-ssu {
+             position: absolute;
+             top: 16px;
+             left: 16px;
+             width: 100px;
+             height: 100px;
+             z-index: 10;
+         }
+         .welcome-bg .logo-cas {
+             position: absolute;
+             top: 32px;
+             right: 32px;
+             width: 80px;
+             height: 80px;
+             z-index: 10;
+         }
+    </style>
+</head>
+<body>
+     <div class="welcome-bg">
+         <img src="../background1.jpg" class="background1" alt="Background">
+         <img src="../yellow.png" class="yellow-overlay" alt="Yellow Overlay">
+         <img src="../box.png" class="box1" alt="Box 1">
+         <img src="../box2.png" class="box2" alt="Box 2">
+         <img src="../circle.png" class="circle-img" alt="Circle">
+         <img src="../grad.png" class="grad-img" alt="Graduates">
+         <img src="../ssulogo.png" class="logo-ssu" alt="SSU Logo">
+         <img src="../logo.png" class="logo-cas" alt="CAS Logo">
+         <div class="header-text">
+             <div class="univ">SAMAR STATE UNIVERSITY</div>
+             <div class="address">ARTECHE BLVD. CATBALOGAN CITY,6700</div>
+             <div class="motto">LEADERSHIP | EXCELLENCE | DISCIPLINE | SERVICE</div>
+         </div>
+         <div class="main-content">
+             <div class="title">GRADUATE<br>TRACER<br>FORM</div>
+             <div class="college">COLLEGE OF ARTS AND SCIENCES</div>
+             <button class="next-btn" onclick="navigateTo('letter-graduating')">NEXT</button>
+         </div>
+     </div>
+    <script>
+    // Get role from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role') || 'graduating';
+    
+    function navigateTo(page) {
+        if (page === 'letter-graduating' || page === 'letter-graduated') {
+            window.location.href = `letter-${role}.html`;
+        } else {
+            window.location.href = page + '.html';
+        }
+    }
+    
+    // Update the button to navigate based on role
+    document.addEventListener('DOMContentLoaded', function() {
+        const nextBtn = document.querySelector('.next-btn');
+        if (nextBtn) {
+            nextBtn.onclick = function() {
+                navigateTo(`letter-${role}`);
+            };
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EmailJS Test</title>
+</head>
+<body>
+    <h1>EmailJS Test</h1>
+    <button onclick="testEmailJS()">Test EmailJS</button>
+    <div id="result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        async function testEmailJS() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                console.log('Initializing EmailJS...');
+                await window.emailjs.init("Oo7ua9u6nvBECsa3d");
+                console.log('EmailJS initialized');
+                
+                const result = await window.emailjs.send(
+                    'service_ckalzp8',
+                    'template_1nagdyk',
+                    {
+                        email: 'bael07222003@gmail.com', // Your template uses {{email}}
+                        reset_code: '123456',
+                        from_name: 'CAS Graduate Tracking System',
+                        subject: 'Password Reset Code',
+                        message: 'Your password reset code is: 123456'
+                    }
+                );
+                
+                console.log('Email sent successfully:', result);
+                resultDiv.innerHTML = '✅ Email sent successfully! Check your inbox.';
+                
+            } catch (error) {
+                console.error('EmailJS error:', error);
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

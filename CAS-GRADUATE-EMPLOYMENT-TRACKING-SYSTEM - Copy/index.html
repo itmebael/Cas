@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAS Graduate Employment Tracking System</title>
+    <link rel="icon" type="image/png" href="ssulogo.png">
+    <link rel="shortcut icon" href="ssulogo.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Formal Dashboard Styles */
+        .formal-dashboard {
+            background: #f8f9fa;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-y: auto;
+            max-height: 100vh;
+            scroll-behavior: smooth;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .dashboard-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            scroll-behavior: smooth;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2a5298;
+        }
+        
+        .profile-details h3 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+        
+        .profile-details p {
+            margin: 0.25rem 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-verified {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .students-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #2a5298 #f1f1f1;
+        }
+        
+        .students-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .students-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .students-list::-webkit-scrollbar-thumb {
+            background: #2a5298;
+            border-radius: 4px;
+        }
+        
+        .students-list::-webkit-scrollbar-thumb:hover {
+            background: #1e3c72;
+        }
+        
+        .student-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            transition: background-color 0.2s;
+        }
+        
+        .student-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .student-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .student-details {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .filter-section {
+            margin-bottom: 1rem;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-controls select,
+        .filter-controls input {
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .filter-controls select:focus,
+        .filter-controls input:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.25);
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1e3c72;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        
+        .loading-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-content {
+                padding: 1rem;
+                max-height: calc(100vh - 150px);
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .dashboard-actions {
+                flex-direction: column;
+            }
+            
+            .students-list {
+                max-height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dashboard-content {
+                padding: 0.5rem;
+                max-height: calc(100vh - 120px);
+            }
+            
+            .students-list {
+                max-height: 250px;
+            }
+        }
+        
+        /* Success Popup and Confetti Styles */
+        .success-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .success-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+        
+        .success-content h2 {
+            color: #2a5298;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .success-content p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confettiFall 3s linear infinite;
+            z-index: 10001;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap" rel="stylesheet">
+    <!-- Font Awesome for formal icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+    <script>
+      window.__SUPABASE_URL__ = "https://mcdkeoomndrwrapcrmch.supabase.co";
+      window.__SUPABASE_ANON__ = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jZGtlb29tbmRyd3JhcGNybWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxOTM2MDAsImV4cCI6MjA3Mjc2OTYwMH0.QOrm-xmC7x_NVdLnVeo3hEH2MLoZqa5oRG9kjR79F5g";
+      
+      // Admin Credentials
+      window.__ADMIN_CREDENTIALS__ = {
+        username: "admin",
+        password: "admin123",
+        fullName: "System Administrator"
+      };
+      
+      // Database Schema Setup
+      const DB_SCHEMA = {
+        profiles: {
+          id: 'uuid primary key default gen_random_uuid()',
+          user_id: 'uuid references auth.users(id)',
+          student_number: 'varchar unique',
+          first_name: 'varchar not null',
+          last_name: 'varchar not null',
+          middle_name: 'varchar',
+          email: 'varchar not null',
+          phone: 'varchar',
+          birth_date: 'date',
+          gender: 'varchar',
+          address: 'text',
+          program: 'varchar not null', // BSIS, BSIT, BSS, BSPSYCH
+          graduation_year: 'integer not null',
+          gpa: 'decimal',
+          thesis_title: 'text',
+          created_at: 'timestamp default now()',
+          updated_at: 'timestamp default now()',
+          status: 'varchar default "active"',
+          verification_status: 'varchar default "pending"'
+        },
+        employment_records: {
+          id: 'uuid primary key default gen_random_uuid()',
+          profile_id: 'uuid references profiles(id)',
+          job_title: 'varchar not null',
+          company_name: 'varchar not null',
+          industry: 'varchar',
+          employment_type: 'varchar not null',
+          salary_range: 'varchar',
+          start_date: 'date',
+          end_date: 'date',
+          is_current: 'boolean default true',
+          job_relevance: 'varchar',
+          location: 'varchar',
+          description: 'text',
+          created_at: 'timestamp default now()',
+          updated_at: 'timestamp default now()',
+          verification_status: 'varchar default "pending"'
+        },
+        surveys: {
+          id: 'uuid primary key default gen_random_uuid()',
+          title: 'varchar not null',
+          description: 'text',
+          type: 'varchar not null',
+          is_active: 'boolean default true',
+          created_at: 'timestamp default now()',
+          expires_at: 'timestamp'
+        },
+        survey_questions: {
+          id: 'uuid primary key default gen_random_uuid()',
+          survey_id: 'uuid references surveys(id)',
+          question_text: 'text not null',
+          question_type: 'varchar not null',
+          options: 'jsonb',
+          is_required: 'boolean default true',
+          order_index: 'integer'
+        },
+        survey_responses: {
+          id: 'uuid primary key default gen_random_uuid()',
+          survey_id: 'uuid references surveys(id)',
+          profile_id: 'uuid references profiles(id)',
+          responses: 'jsonb not null',
+          submitted_at: 'timestamp default now()',
+          ip_address: 'varchar'
+        },
+        notifications: {
+          id: 'uuid primary key default gen_random_uuid()',
+          profile_id: 'uuid references profiles(id)',
+          type: 'varchar not null',
+          title: 'varchar not null',
+          message: 'text not null',
+          is_read: 'boolean default false',
+          sent_at: 'timestamp default now()'
+        },
+        audit_logs: {
+          id: 'uuid primary key default gen_random_uuid()',
+          user_id: 'uuid references auth.users(id)',
+          action: 'varchar not null',
+          table_name: 'varchar not null',
+          record_id: 'uuid',
+          old_values: 'jsonb',
+          new_values: 'jsonb',
+          created_at: 'timestamp default now()'
+        }
+      };
+    </script>
+</head>
+<body>
+    <!-- Screen 1: Modern Glassmorphism Splash Screen (moved to screens/splash-screen.html) -->
+    <div id="splash-screen" class="screen active" aria-label="Splash Screen">
+        <div class="splash-container">
+            <div class="splash-bg-shapes">
+                <div class="bg-shape-1"></div>
+                <div class="bg-shape-2"></div>
+                <div class="bg-shape-3"></div>
+            </div>
+            <div class="splash-glassmorphism-container" data-tilt>
+                <img src="logo.png" alt="CAS" class="splash-logo-top-left splash-logo" />
+                <img src="ssulogo.png" alt="SSU" class="splash-logo-top-right splash-logo" />
+                <div class="splash-content">
+                    <div class="splash-text-content">
+                        <div class="splash-subtitle">Samar State University</div>
+                        <div class="splash-title">
+                            <span class="title-main">CAS Graduate Employment</span>
+                            <span class="title-glow">Tracking System</span>
+                        </div>
+                        <div class="splash-description">Welcome. Choose an option to continue.</div>
+                        <div class="splash-actions">
+                            <button class="splash-btn-primary" onclick="navigateTo('student-admin');">
+                                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="splash-decorative"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Student Profile</h3>
+                <button class="modal-close" onclick="closeEditProfileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-student-id">Student ID</label>
+                            <input type="text" id="edit-student-id" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-full-name">Full Name</label>
+                            <input type="text" id="edit-full-name" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-email">Email</label>
+                            <input type="email" id="edit-email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-phone">Phone</label>
+                            <input type="text" id="edit-phone" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-program">Program</label>
+                            <select id="edit-program" class="form-input" required>
+                                <option value="">Select Program</option>
+                                <option value="BSIS">Bachelor of Science in Information System (BSIS)</option>
+                                <option value="BSIT">Bachelor of Science in Information Technology (BSIT)</option>
+                                <option value="BSS">Bachelor of Science in Statistics (BSS)</option>
+                                <option value="BSPSYCH">Bachelor of Science in Psychology (BSPSYCH)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-user-type">User Type</label>
+                            <select id="edit-user-type" class="form-input" required>
+                                <option value="">Select Type</option>
+                                <option value="graduating">Graduating</option>
+                                <option value="graduated">Graduated</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-graduation-year">Graduation Year</label>
+                            <input type="number" id="edit-graduation-year" class="form-input" min="1900" max="2100">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-current-gpa">Current GPA</label>
+                            <input type="number" id="edit-current-gpa" class="form-input" step="0.01" min="0" max="4">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-verification-status">Verification Status</label>
+                            <select id="edit-verification-status" class="form-input">
+                                <option value="pending">Pending</option>
+                                <option value="verified">Verified</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-address">Address</label>
+                            <textarea id="edit-address" class="form-input" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-thesis-title">Thesis Title</label>
+                            <textarea id="edit-thesis-title" class="form-input" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-thesis-advisor">Thesis Advisor</label>
+                            <input type="text" id="edit-thesis-advisor" class="form-input">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditProfileModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Query Builder Modal -->
+    <div id="query-builder-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Custom Data Query</h3>
+                <button class="modal-close" onclick="closeQueryBuilder()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="query-section">
+                    <label>Select Table:</label>
+                    <select id="query-table" class="form-input">
+                        <option value="users">users</option>
+                        <option value="profiles">profiles</option>
+                        <option value="employment_records">employment_records</option>
+                        <option value="system_logs">system_logs</option>
+                        <option value="notifications">notifications</option>
+                    </select>
+                </div>
+                
+                <div class="query-section">
+                    <label>Select Columns (comma-separated, leave empty for all):</label>
+                    <input type="text" id="query-columns" class="form-input" placeholder="e.g., full_name, email, user_type">
+                </div>
+                
+                <div class="query-section">
+                    <label>Filter Conditions (optional):</label>
+                    <div class="filter-row">
+                        <select id="filter-column" class="form-input">
+                            <option value="">Select Column</option>
+                        </select>
+                        <select id="filter-operator" class="form-input">
+                            <option value="eq">Equals (=)</option>
+                            <option value="neq">Not Equals (!=)</option>
+                            <option value="gt">Greater Than (>)</option>
+                            <option value="gte">Greater or Equal (>=)</option>
+                            <option value="lt">Less Than (<)</option>
+                            <option value="lte">Less or Equal (<=)</option>
+                            <option value="like">Contains (LIKE)</option>
+                            <option value="ilike">Contains (ILIKE)</option>
+                            <option value="in">In List</option>
+                        </select>
+                        <input type="text" id="filter-value" class="form-input" placeholder="Value">
+                    </div>
+                </div>
+                
+                <div class="query-section">
+                    <label>Order By (optional):</label>
+                    <div class="order-row">
+                        <input type="text" id="order-column" class="form-input" placeholder="Column name">
+                        <select id="order-direction" class="form-input">
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="query-section">
+                    <label>Limit (optional):</label>
+                    <input type="number" id="query-limit" class="form-input" placeholder="Number of records" min="1" max="1000">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeQueryBuilder()">Cancel</button>
+                <button class="btn btn-primary" onclick="executeCustomQuery()">Execute Query</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: Admin Dashboard -->
+    <div id="admin-screen" class="screen">
+        <div class="admin-layout">
+            <aside class="admin-sidebar">
+                <div class="admin-brand">
+                    <img src="logo.png" alt="CAS"/>
+                    <div>CAS ALUMNI RELATIONS<br/> &amp; PLACEMENT SERVICES.</div>
+                </div>
+                <nav class="admin-nav">
+                    <button class="admin-nav-item is-active" data-admin-view="dashboard">Dashboard</button>
+                    <button class="admin-nav-item" data-admin-view="program">Program</button>
+                    <button class="admin-nav-item" data-admin-view="database">Database</button>
+                    
+                    <button class="admin-nav-item" data-admin-view="surveys">Surveys</button>
+                    <button class="admin-nav-item" data-admin-view="reports">Reports</button>
+                    <button class="admin-nav-item" data-admin-view="graduated-accounts">Graduated Accounts</button>
+                    
+                    <button class="admin-nav-item" data-admin-view="custom-query">Custom Query</button>
+                </nav>
+            </aside>
+            <main class="admin-content">
+                <div class="admin-topbar">
+                    <div class="admin-top-title">CAS Employability Dashboard</div>
+                    <div class="admin-top-actions">
+                        
+                        <button class="admin-refresh-btn" onclick="refreshAdminData()" title="Refresh Data"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
+                        <button class="admin-bell" title="Notifications"><i class="fa-solid fa-bell" aria-hidden="true"></i></button>
+                        <button class="admin-chart-btn" onclick="refreshCharts()" title="Refresh Charts"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></button>
+                        <button class="admin-logout-btn" onclick="logout()" title="Logout" aria-label="Logout">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M16 17L21 12L16 7" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 12H8" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <section class="admin-view" data-view="dashboard">
+                    <!-- 3D Stats Cards -->
+                    <div class="admin-cards-3d">
+                        <div class="admin-card-3d admin-card--primary" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Total Students</div>
+                                    <div class="card-value" id="metric-students">0</div>
+                                    <div class="card-change" id="students-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                        
+                        <div class="admin-card-3d admin-card--success" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Total Graduates</div>
+                                    <div class="card-value" id="metric-graduates">0</div>
+                                    <div class="card-change" id="graduates-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                        
+                        <div class="admin-card-3d admin-card--info" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Employed</div>
+                                    <div class="card-value" id="metric-employed">0</div>
+                                    <div class="card-change" id="employed-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                        
+                        <div class="admin-card-3d admin-card--warning" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Job Searching</div>
+                                    <div class="card-value" id="metric-unemployed">0</div>
+                                    <div class="card-change" id="unemployed-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                        
+                        <div class="admin-card-3d admin-card--danger" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Pending Verification</div>
+                                    <div class="card-value" id="metric-pending">0</div>
+                                    <div class="card-change" id="pending-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                        
+                        <div class="admin-card-3d admin-card--gradient" data-tilt>
+                            <div class="card-3d-content">
+                                <div class="card-icon"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></div>
+                                <div class="card-info">
+                                    <div class="card-title">Employment Rate</div>
+                                    <div class="card-value" id="metric-rate">0%</div>
+                                    <div class="card-change" id="rate-change">+0%</div>
+                                </div>
+                            </div>
+                            <div class="card-3d-shadow"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 3D Charts Section -->
+                    <div class="admin-charts-3d">
+                        
+
+                        
+                        
+                        
+                        <div class="chart-3d-container" data-tilt>
+                            <div class="chart-header">
+                                <h3>Program Distribution</h3>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active" data-chart="bar">Bar</button>
+                                </div>
+                            </div>
+                            <div class="chart-3d-wrapper">
+                                <canvas id="programChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-3d-container" data-tilt>
+                            <div class="chart-header">
+                                <h3>Graduation Year Trends</h3>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active" data-chart="line">Line</button>
+                                </div>
+                            </div>
+                            <div class="chart-3d-wrapper">
+                                <canvas id="yearChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="admin-panel">
+                        <div class="admin-panel-title">List of Graduates</div>
+                        <div class="admin-program-filter">
+                            <button class="prog-filter is-active" data-prog="ALL">All</button>
+                            <button class="prog-filter" data-prog="BSIS">BSIS</button>
+                            <button class="prog-filter" data-prog="BSIT">BSIT</button>
+                            <button class="prog-filter" data-prog="BSS">BSS</button>
+                            <button class="prog-filter" data-prog="BSPSYCH">BSPSYCH</button>
+                        </div>
+                        <table class="admin-table" id="admin-table">
+                            <thead><tr><th>Name</th><th>Program</th><th>Year Graduated</th><th>Employment Status</th><th>Gender</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="admin-view" data-view="program" hidden>
+                    <div class="admin-panel-title">Programs</div>
+                    
+                    <!-- Program Filter Section -->
+                    <div class="program-filter-section">
+                        <h3>Filter by Program</h3>
+                        <div class="program-filter-grid">
+                            <div class="prog-card filter-card active" data-program="all">All Programs</div>
+                            <div class="prog-card filter-card" data-program="BSIS">Bachelor of Science in Information System (BSIS)</div>
+                            <div class="prog-card filter-card" data-program="BSIT">Bachelor of Science in Information Technology (BSIT)</div>
+                            <div class="prog-card filter-card" data-program="BSS">Bachelor of Science in Statistics (BSS)</div>
+                            <div class="prog-card filter-card" data-program="BSPSYCH">Bachelor of Science in Psychology (BSPSYCH)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Program Results Section -->
+                    <div class="program-results-section" id="program-results" style="display: none;">
+                        <div class="program-results-header">
+                            <h3 id="program-results-title">Program Results</h3>
+                            <button class="close-program-results" onclick="closeProgramResults()">×</button>
+                        </div>
+                        <div class="program-results-content">
+                            <div class="graduated-students-section">
+                                <h4>Graduated Students</h4>
+                                <div class="students-table-container">
+                                    <table class="students-table" id="graduated-students-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Student ID</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Graduation Year</th>
+                                                <th>Employment Status</th>
+                                                <th>Verification</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="graduating-students-section">
+                                <h4>Graduating Students</h4>
+                                <div class="students-table-container">
+                                    <table class="students-table" id="graduating-students-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Student ID</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Expected Graduation</th>
+                                                <th>Current GPA</th>
+                                                <th>Verification</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </section>
+                <section class="admin-view" data-view="database" hidden>
+                    <div class="admin-panel-title">Student Database</div>
+                    <div class="database-controls">
+                        <input class="form-input admin-search" id="admin-search" placeholder="Search student ID, name, email, or program"/>
+                        <button class="refresh-db-btn" onclick="loadProfilesTable()" title="Refresh Data">🔄</button>
+                        <button class="admin-btn-primary" onclick="initializeDatabase()" title="Initialize Database">Initialize Database</button>
+                        <button class="admin-btn-secondary" onclick="addSampleData()" title="Add Sample Data">Add Sample Data</button>
+                        <button class="admin-btn-secondary" onclick="testDatabaseConnection()" title="Test Connection">Test Connection</button>
+                        <button class="admin-btn-secondary" onclick="testUserLookup('jane.smith@ssu.edu.ph')" title="Test User Lookup">Test User Lookup</button>
+                    </div>
+                    <div class="test-credentials-info" style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                        <h4 style="color: #0369a1; margin: 0 0 12px 0;">Test Credentials for Login</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                            <div>
+                                <strong>Graduating Student:</strong><br>
+                                Email: john.doe@ssu.edu.ph<br>
+                                Password: password123
+                            </div>
+                            <div>
+                                <strong>Graduated Student:</strong><br>
+                                Email: jane.smith@ssu.edu.ph<br>
+                                Password: password123
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
+                            <strong>Note:</strong> Use these credentials to test the login functionality. Make sure to initialize the database first.
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table" id="admin-db-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Program</th>
+                                    <th>User Type</th>
+                                    <th>Graduation Year</th>
+                                    <th>Current GPA</th>
+                                    <th>Verification</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="admin-view" data-view="verification" hidden>
+                    <div class="admin-panel-title">Verification Management</div>
+                    <div class="verification-controls">
+                        <div class="verification-filters">
+                            <select id="verification-filter" class="form-input">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="verified">Verified</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                            <button class="refresh-btn" onclick="loadVerificationData()" title="Refresh">🔄</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table" id="verification-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Program</th>
+                                    <th>User Type</th>
+                                    <th>Current Status</th>
+                                    <th>Submitted Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section class="admin-view" data-view="surveys" hidden>
+                    <div class="admin-panel-title">Survey Management</div>
+                    <div class="survey-stats">
+                        <div class="stat-card">
+                            <h3>Total Surveys</h3>
+                            <div class="stat-number" id="total-surveys">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Completed</h3>
+                            <div class="stat-number" id="completed-surveys">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>In Progress</h3>
+                            <div class="stat-number" id="in-progress-surveys">0</div>
+                        </div>
+                    </div>
+                    <div class="survey-actions">
+                        <button class="btn btn-primary" onclick="createNewSurvey()">Create New Survey</button>
+                        <button class="btn btn-secondary" onclick="exportSurveyData()">Export Data</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table" id="surveys-table">
+                            <thead>
+                                <tr>
+                                    <th>Survey Name</th>
+                                    <th>Target Group</th>
+                                    <th>Status</th>
+                                    <th>Responses</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section class="admin-view" data-view="reports" hidden>
+                    <div class="admin-panel-title">Reports & Analytics</div>
+                    <div class="reports-grid">
+                        <div class="report-card" onclick="generateReport('employment')">
+                            <div class="report-icon"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
+                            <h3>Employment Report</h3>
+                            <p>Graduate employment statistics and trends</p>
+                        </div>
+                        <div class="report-card" onclick="generateReport('program')">
+                            <div class="report-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                            <h3>Program Report</h3>
+                            <p>Program-wise student distribution and outcomes</p>
+                        </div>
+                        <div class="report-card" onclick="generateReport('verification')">
+                            <div class="report-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                            <h3>Verification Report</h3>
+                            <p>Student verification status and progress</p>
+                        </div>
+                        <div class="report-card" onclick="generateReport('survey')">
+                            <div class="report-icon"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></div>
+                            <h3>Survey Report</h3>
+                            <p>Survey responses and feedback analysis</p>
+                        </div>
+                    </div>
+                    <div class="export-options">
+                        <h3>Export Options</h3>
+                        <div class="export-buttons">
+                            <button class="btn btn-secondary" onclick="exportToCSV()">Export to CSV</button>
+                            <button class="btn btn-primary" onclick="exportAllToXLSX()">Export All to Excel (.xlsx)</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-view="graduated-accounts" hidden>
+                    <div class="admin-panel-title">Graduated Accounts</div>
+                    <div class="verification-controls">
+                        <button class="btn btn-secondary" onclick="loadGraduatedAccounts()">Refresh</button>
+                        <button class="btn btn-primary" onclick="generateGraduatedAccountsDue()">Generate Accounts (Due)</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table" id="graduated-accounts-table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Issued</th>
+                                    <th>Delivered</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                
+                
+                
+                
+                <section class="admin-view" data-view="surveys" hidden>
+                    <div class="admin-panel">
+                        <div class="admin-panel-title">Survey Management</div>
+                        <button class="admin-btn-primary">Create New Survey</button>
+                        <div class="admin-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Survey Title</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Responses</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="surveys-table">
+                                    <!-- Survey data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="admin-view" data-view="notifications" hidden>
+                    <div class="admin-panel">
+                        <div class="admin-panel-title">Email Notifications</div>
+                        <div class="notification-controls">
+                            <button class="admin-btn-primary">Send Reminder to All</button>
+                            <button class="admin-btn-secondary">Send Survey Invite</button>
+                            <button class="admin-btn-secondary">Send Employment Update Reminder</button>
+                        </div>
+                        <div class="admin-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Recipient</th>
+                                        <th>Type</th>
+                                        <th>Subject</th>
+                                        <th>Sent</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notifications-table">
+                                    <!-- Notification data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Custom Query View -->
+                <section class="admin-view" data-view="custom-query" hidden>
+                    <div class="admin-panel">
+                        <div class="admin-panel-title">Custom Data Query</div>
+                        
+                        <div class="query-controls">
+                            <button class="btn btn-primary" onclick="openQueryBuilder()">
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Open Query Builder
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportQueryResults()">
+                                <i class="fa-solid fa-chart-column" aria-hidden="true"></i> Export Results
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearQueryResults()">
+                                <i class="fa-solid fa-trash-can" aria-hidden="true"></i> Clear Results
+                            </button>
+                        </div>
+                        
+                        <div class="query-results-section">
+                            <h3>Query Results</h3>
+                            <div id="query-results-info" class="query-info">
+                                No query executed yet. Click "Open Query Builder" to start.
+                            </div>
+                            <div id="query-results-table" class="query-results-table" style="display: none;">
+                                <table class="admin-table">
+                                    <thead id="query-results-header"></thead>
+                                    <tbody id="query-results-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    
+
+    <!-- Screen 2: Main Interface - Student/Admin Selection -->
+    <div id="student-admin-screen" class="screen">
+        <div class="main-interface">
+            <!-- Background with university building -->
+            <div class="background-container">
+                <img 
+                    class="university-building" 
+                    alt="University building" 
+                    src="background1.jpg"
+                />
+            </div>
+
+            <!-- Top-right accent using down.png -->
+            <img src="down.png" alt="Top right accent" class="accent-up-right">
+            
+            <!-- Bottom-left accent using upretangle.png at x:-14, y:733 -->
+            <img src="upretangle.png" alt="Bottom left accent" class="accent-down-left">
+            <div class="cas-banner-text">CAS ALUMNI RELATION <br>&amp; PLACEMENT SERVICES</div>
+            
+            <!-- Circular emblem overlay -->
+            <div class="emblem-overlay">
+                <img src="logo.png" alt="CAS Logo" class="emblem-image">
+            </div>
+            
+            <!-- Interactive blue panel -->
+            <div class="interactive-panel interactive-panel--tight">
+                <button class="role-button student-button" onclick="selectRole('student')">
+                    Are you a student?
+                </button>
+                <div class="or-separator">or</div>
+                <button class="role-button admin-button" onclick="selectRole('admin')">
+                    Are you an admin?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Graduating/Graduated Student Selection (reuse Screen 2 design) -->
+    <div id="graduating-screen" class="screen">
+        <div class="main-interface">
+            <div class="background-container">
+                <img class="university-building" alt="University building" src="background1.jpg" />
+            </div>
+            <!-- Match Screen 2 accents and banner -->
+            <img src="down.png" alt="Top right accent" class="accent-up-right">
+            <img src="upretangle.png" alt="Bottom left accent" class="accent-down-left">
+            <div class="cas-banner-text">CAS ALUMNI RELATION <br>&amp; PLACEMENT SERVICES</div>
+
+            <!-- Circular emblem overlay -->
+            <div class="emblem-overlay">
+                <img src="logo.png" alt="CAS Logo" class="emblem-image">
+            </div>
+
+            <!-- Interactive blue panel (tight variant like Screen 2) -->
+            <div class="interactive-panel interactive-panel--tight">
+                <button class="role-button graduating-button">Graduating student?</button>
+                <div class="or-separator">or</div>
+                <button class="role-button graduated-button">Graduated student?</button>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <!-- Screen 5: Forgot Password -->
+    <div id="forgot-screen" class="screen">
+        <div class="main-interface">
+            <div class="background-container">
+                <img class="university-building" alt="University building" src="background1.jpg" />
+            </div>
+            <img src="down.png" alt="Top right accent" class="accent-up-right">
+            <img src="upretangle.png" alt="Bottom left accent" class="accent-down-left">
+            <div class="cas-banner-text">CAS ALUMNI RELATION <br>&amp; PLACEMENT SERVICES</div>
+            <div class="emblem-overlay">
+                <img src="logo.png" alt="CAS Logo" class="emblem-image">
+            </div>
+            <div class="interactive-panel interactive-panel--tight">
+                <br>
+                <div class="panel-title">Reset Password</div>
+                <div class="panel-subtitle">Enter your email address to receive a 6-digit reset code</div>
+                
+                <!-- Email Input Section -->
+                <div id="email-section">
+                    <input class="form-input" id="reset-email" type="email" placeholder="Email Address" />
+                    <button class="primary-button" id="send-code-btn">Send Reset Code</button>
+                </div>
+                
+                <!-- Token Input Section (hidden initially) -->
+                <div id="token-section" style="display: none;">
+                    <div class="panel-subtitle" style="margin-top: 20px;">Enter the 6-digit code from your email</div>
+                    <input class="form-input" id="token-input" type="text" placeholder="6-digit reset code" maxlength="6" style="text-align: center; font-size: 18px; letter-spacing: 2px;" />
+                    <button class="primary-button" id="verify-token-btn" style="margin-top: 10px;">Verify Code & Proceed</button>
+                </div>
+                
+                <!-- Success Message -->
+                <div id="success-message" style="display: none; margin: 20px 0; padding: 15px; background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: bold; color: #15803d; margin-bottom: 10px;">✓ Reset code sent!</div>
+                    <div style="color: #166534; font-size: 14px;">Check your email for the 6-digit reset code</div>
+                </div>
+                
+                <button class="link-button go-login">Back to login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Form Screen -->
+    <div id="reset-password-screen" class="screen">
+        <div class="main-interface">
+            <div class="background-container">
+                <img class="university-building" alt="University building" src="background1.jpg" />
+            </div>
+            <img src="down.png" alt="Top right accent" class="accent-up-right">
+            <img src="upretangle.png" alt="Bottom left accent" class="accent-down-left">
+            <div class="cas-banner-text">CAS ALUMNI RELATION <br>&amp; PLACEMENT SERVICES</div>
+            <div class="emblem-overlay">
+                <img src="logo.png" alt="CAS Logo" class="emblem-image">
+            </div>
+            <div class="interactive-panel interactive-panel--tight">
+                <br>
+                <div class="panel-title">🔐 Create New Password</div>
+                <div class="panel-subtitle">Enter your new password below</div>
+                
+                <!-- Hidden fields for verification -->
+                <input class="form-input" id="reset-email-field" type="email" placeholder="Email Address" style="display: none;" />
+                <label for="reset-token" style="display: none;">Reset Code:</label>
+                <input class="form-input" id="reset-token" type="text" placeholder="6-digit reset code" style="display: none;" />
+                
+                <!-- Password Fields -->
+                <div class="form-group">
+                    <label class="form-label" for="new-password">
+                        New Password<span class="required">*</span>
+                    </label>
+                    <div class="password-input-wrapper">
+                        <input class="form-input modern-input" id="new-password" type="password" placeholder="Enter your new password" required />
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password')">
+                            <span class="toggle-icon"><i class="fa-solid fa-eye"></i></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="confirm-password">
+                        Confirm Password<span class="required">*</span>
+                    </label>
+                    <div class="password-input-wrapper">
+                        <input class="form-input modern-input" id="confirm-password" type="password" placeholder="Confirm your new password" required />
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-password')">
+                            <span class="toggle-icon"><i class="fa-solid fa-eye"></i></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Password Requirements -->
+                <div class="password-requirements">
+                    <small>Password must be at least 6 characters long</small>
+                </div>
+                
+                <button class="primary-button modern-button" id="update-password-btn">
+                    <i class="fa-solid fa-key"></i> Update Password
+                </button>
+                
+                <div class="form-footer">
+                    <button class="link-button go-login">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Login
+                    </button>
+                    <div class="form-divider">
+                        <span>or</span>
+                    </div>
+                    <button class="link-button go-register">
+                        <i class="fa-solid fa-user-plus"></i> Create New Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 6: Register -->
+    <div id="register-screen" class="screen">
+        <div class="main-interface">
+            <button class="back-button go-back" aria-label="Go back">← Back</button>
+            <div class="background-container">
+                <img class="university-building" alt="University building" src="background1.jpg" />
+            </div>
+            <img src="down.png" alt="Top right accent" class="accent-up-right">
+            <img src="upretangle.png" alt="Bottom left accent" class="accent-down-left">
+            <div class="cas-banner-text">CAS ALUMNI RELATION <br>&amp; PLACEMENT SERVICES</div>
+            <div class="emblem-overlay">
+                <img src="logo.png" alt="CAS Logo" class="emblem-image">
+            </div>
+            <div class="interactive-panel interactive-panel--register">
+                <div class="register-header">
+                    <br>
+                    <div class="register-acc-text">Register acc</div>
+                    <div class="panel-title">Register Account</div>
+                    <div class="panel-subtitle">Join the CAS Graduate Employment Tracking System</div>
+                </div>
+                
+                <div class="register-form">
+                    <div class="form-group">
+                        <label class="form-label" for="register-name">
+                            Full Name<span class="required">*</span>
+                        </label>
+                        <input class="form-input modern-input" type="text" placeholder="Enter your full name" id="register-name" required />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-ssu-id">
+                            Student ID<span class="required">*</span>
+                        </label>
+                        <input class="form-input modern-input" type="text" placeholder="Enter your SSU Student ID" id="register-ssu-id" required />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-email">
+                            Email Address<span class="required">*</span>
+                        </label>
+                        <input class="form-input modern-input" type="email" placeholder="Enter your email address" id="register-email" required />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-user-type">
+                            Student Type<span class="required">*</span>
+                        </label>
+                        <select class="form-input modern-input" id="register-user-type" required>
+                            <option value="">Select your status</option>
+                            <option value="graduating">Graduating Student</option>
+                            <option value="graduated">Graduated Student</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-password">
+                            Password<span class="required">*</span>
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input class="form-input modern-input" type="password" placeholder="Create a password" id="register-password" required />
+                            <button class="password-toggle" type="button" onclick="togglePasswordVisibility('register-password')">
+                                <span class="toggle-icon"><i class="fa-solid fa-eye"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-confirm-password">
+                            Confirm Password<span class="required">*</span>
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input class="form-input modern-input" type="password" placeholder="Confirm your password" id="register-confirm-password" required />
+                            <button class="password-toggle" type="button" onclick="togglePasswordVisibility('register-confirm-password')">
+                                <span class="toggle-icon"><i class="fa-solid fa-eye"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="register-actions">
+                        <button class="primary-button modern-button" id="register-submit" type="submit">
+                            Create Account
+                        </button>
+                        
+                        <div class="register-options">
+                            <button class="link-button go-login" type="button">
+                                Already have an account? Sign In
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the main script file -->
+    <script src="script.js"></script>
+</body>
+</html>

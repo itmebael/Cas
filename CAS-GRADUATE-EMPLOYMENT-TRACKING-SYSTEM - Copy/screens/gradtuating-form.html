@@ -1,0 +1,294 @@
+ <!-- Screen 9: Dashboard 3 (Graduating Tracer Form) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduating Student Form</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* Ensure this standalone page shows even if global .screen hides it */
+        .screen { display:block !important; }
+        .dash3-header { position:sticky; top:0; z-index:6; display:grid; grid-template-columns:80px 1fr 80px; align-items:center; gap:16px; background:linear-gradient(90deg,#1e3a8a,#2742a2); color:#fff; padding:10px 0; box-shadow:0 8px 20px rgba(0,0,0,.08); }
+        .dash3-header img { width:64px; height:64px; object-fit:contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+        .dash3-title-wrap { text-align:center; }
+        .dash3-uni { font-family:'Times New Roman',serif; font-weight:800; letter-spacing:.5px; font-size:22px; }
+        .dash3-sub { font-size:12px; opacity:.95; }
+        .dash3-form { font-size:18px; font-weight:800; margin-top:4px; color:#fff; }
+        .dash3-section-bar { background:#1e3a8a; color:#fff; border-radius:8px; padding:6px 10px; font-weight:800; }
+        .next-button { background:linear-gradient(90deg,#1e3a8a,#0f1f58); border:none; color:#fff; padding:14px 36px; border-radius:999px; font-weight:800; box-shadow:0 12px 30px rgba(30,58,138,.35); }
+        .next-button:hover { filter:brightness(1.05); transform: translateY(-1px); }
+                /* Form labels and text styling */
+                .form-label { color:#000000; font-weight:600; margin-bottom:8px; display:block; }
+        .form-input { color:#000000; background:#ffffff; }
+        .form-input::placeholder { color:#6b7280; }
+        /* Ensure white, formal background (avoid dark overlays) */
+        .main-interface { background:#ffffff; }
+        .background-container, .dash-yellow-tint { display:none !important; }
+        body { background:#ffffff; }
+    </style>
+</head>
+    <div id="dashboard3-screen" class="screen">
+        <div class="main-interface">
+   
+            <div class="background-container">
+                <img class="university-building" alt="University building" src="../background1.jpg" />
+            </div>
+            <div class="dash-yellow-tint"></div>
+            <div class="dashboard3-container">
+                <div class="dash3-header">
+                    <img src="../logo.png" alt="CAS"/>
+                    <div class="dash3-title-wrap">
+                        <div class="dash3-uni">SAMAR STATE UNIVERSITY</div>
+                        <div class="dash3-sub">Arche Blvd, Catbalogan City, 6700 • ssu.edu.ph</div>
+                        <div class="dash3-form"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Graduating Student Profile</div>
+                    </div>
+                    <img src="../ssulogo.png" alt="SSU"/>
+                </div>
+
+                <div class="dash3-section">
+                    <div class="dash3-section-bar"><span>A. GENERAL INFORMATION</span></div>
+                    <div class="dash3-grid dash3-grid-2">
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-name">Last Name, First Name M.I<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-name" name="full_name" aria-required="true" />
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-contact">Contact No<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-contact" name="contact" aria-required="true" />
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-current-address">Current Address<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-current-address" name="current_address" aria-required="true" />
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label">Is the current Address the same as the permanent address?</label>
+                            <div class="dash3-choice-row">
+                                <label class="choice"><input type="radio" name="addr-same" value="yes" checked/> Yes</label>
+                                <label class="choice"><input type="radio" name="addr-same" value="no"/> No</label>
+                            </div>
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-age">Age<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-age" name="age" type="number" min="16" max="100" aria-required="true" />
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-email">Email Address<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-email" name="email" type="email" aria-required="true" />
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-picture">Profile Picture<span aria-hidden="true">*</span></label>
+                            <input class="form-input" id="gi-picture" name="picture" type="file" accept="image/*" aria-required="true" onchange="previewImage(this)" />
+                            <div id="picture-preview" style="margin-top: 10px; display: none;">
+                                <img id="preview-img" style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid #ddd;" />
+                            </div>
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label" for="gi-permanent-address">If no, indicate your Permanent Address</label>
+                            <input class="form-input" id="gi-permanent-address" name="permanent_address" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="dash3-section">
+                    <div class="dash3-section-bar"><span>C. Educational Background</span></div>
+                    <div class="dash3-grid dash3-grid-2">
+                        <div class="dash3-col">
+                            <label class="dash3-label">Baccalaureate Degree *</label>
+                            <div class="dash3-card">
+                                <label class="choice"><input type="radio" name="program" value="BSPSYCH" required/> Bachelor of Science in Psychology (BSPSYCH)</label>
+                                <label class="choice"><input type="radio" name="program" value="BSIS" required/> Bachelor of Science in Information System (BSIS)</label>
+                                <label class="choice"><input type="radio" name="program" value="BSS" required/> Bachelor of Science in Statistics (BSS)</label>
+                                <label class="choice"><input type="radio" name="program" value="BSIT" required/> Bachelor of Science in Information Technology (BSIT)</label>
+                            </div>
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label">Graduation Year *</label>
+                            <input class="form-input" name="graduation_year" type="number" min="2000" max="2030" required/>
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label">GPA (Optional)</label>
+                            <input class="form-input" name="gpa" type="number" step="0.01" min="1.0" max="4.0"/>
+                        </div>
+                        <div class="dash3-col">
+                            <label class="dash3-label">Thesis Title (Optional)</label>
+                            <input class="form-input" name="thesis_title" type="text"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="dash3-section">
+                    <div class="dash3-section-bar"><span>D. Social Media Accounts</span></div>
+                    <div class="dash3-grid dash3-grid-2">
+                        <div class="dash3-col"><label class="dash3-label">Facebook Name and Link</label><input class="form-input" id="sm-fb"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Other Social Media (Link)</label><input class="form-input" id="sm-other"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Instagram Name and Link</label><input class="form-input" id="sm-ig"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Twitter/X Name and Link</label><input class="form-input" id="sm-x"/></div>
+                    </div>
+                </div>
+
+                <div class="dash3-section">
+                    <div class="dash3-section-bar"><span>E. Parents Information</span></div>
+                    <div class="dash3-grid dash3-grid-2">
+                        <div class="dash3-col"><label class="dash3-label">Father's Name</label><input class="form-input" id="p-father"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Mother's Name</label><input class="form-input" id="p-mother"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Contact Number</label><input class="form-input" id="p-father-contact"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Contact Number</label><input class="form-input" id="p-mother-contact"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Occupation</label><input class="form-input" id="p-father-occ"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Occupation</label><input class="form-input" id="p-mother-occ"/></div>
+                    </div>
+                </div>
+
+                <div class="dash3-section">
+                    <div class="dash3-section-bar"><span>F. Emergency/Alternate Contact</span></div>
+                    <div class="dash3-grid dash3-grid-2">
+                        <div class="dash3-col"><label class="dash3-label">Contact Person Name*</label><input class="form-input" id="em-name"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Email Address*</label><input class="form-input" id="em-email" type="email"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Relationship*</label>
+                            <div class="dash3-choice-row">
+                                <label class="choice"><input type="radio" name="em-rel" value="Sibling"/> Sibling</label>
+                                <label class="choice"><input type="radio" name="em-rel" value="Friend"/> Friend</label>
+                                <label class="choice"><input type="radio" name="em-rel" value="Relative"/> Relative</label>
+                                <label class="choice"><input type="radio" name="em-rel" value="Other"/> Other</label>
+                            </div>
+                        </div>
+                        <div class="dash3-col"><label class="dash3-label">Facebook Name and Link</label><input class="form-input" id="em-fb"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Phone Number*</label><input class="form-input" id="em-phone"/></div>
+                        <div class="dash3-col"><label class="dash3-label">Other Social Media</label><input class="form-input" id="em-other"/></div>
+                    </div>
+                </div>
+
+                <div class="dash3-actions">
+                    <button class="next-button dash3-submit" onclick="submitForm()">SUBMIT </button>
+                    <button id="cancel-edit-btn" class="cancel-button" onclick="cancelEditForm()" style="display: none; background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; margin-left: 10px;">Cancel Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Supabase configuration
+      const SUPABASE_URL = "https://mcdkeoomndrwrapcrmch.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jZGtlb29tbmRyd3JhcGNybWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxOTM2MDAsImV4cCI6MjA3Mjc2OTYwMH0.QOrm-xmC7x_NVdLnVeo3hEH2MLoZqa5oRG9kjR79F5g";
+      
+      // Initialize Supabase client
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // Standalone helpers so this page works without the main router (script.js)
+      function previewImage(input){
+        const file = input.files && input.files[0];
+        if(!file) return;
+        const url = URL.createObjectURL(file);
+        const img = document.getElementById('preview-img');
+        const wrap = document.getElementById('picture-preview');
+        if(img && wrap){ img.src = url; wrap.style.display='block'; }
+      }
+      function closeSuccessPopup(){
+        const el = document.getElementById('success-popup');
+        if(el) el.classList.remove('show');
+      }
+      async function submitForm(){
+        try {
+          // Collect form data
+          const formData = {
+            full_name: document.getElementById('gi-name').value,
+            contact: document.getElementById('gi-contact').value,
+            current_address: document.getElementById('gi-current-address').value,
+            age: document.getElementById('gi-age').value,
+            email: document.getElementById('gi-email').value,
+            program: document.querySelector('input[name="program"]:checked')?.value,
+            graduation_year: document.querySelector('input[name="graduation_year"]').value,
+            gpa: document.querySelector('input[name="gpa"]').value,
+            thesis_title: document.querySelector('input[name="thesis_title"]').value,
+            facebook: document.getElementById('sm-fb').value,
+            instagram: document.getElementById('sm-ig').value,
+            twitter: document.getElementById('sm-x').value,
+            other_social: document.getElementById('sm-other').value,
+            father_name: document.getElementById('p-father').value,
+            mother_name: document.getElementById('p-mother').value,
+            father_contact: document.getElementById('p-father-contact').value,
+            mother_contact: document.getElementById('p-mother-contact').value,
+            father_occupation: document.getElementById('p-father-occ').value,
+            mother_occupation: document.getElementById('p-mother-occ').value,
+            emergency_name: document.getElementById('em-name').value,
+            emergency_email: document.getElementById('em-email').value,
+            emergency_relationship: document.querySelector('input[name="em-rel"]:checked')?.value,
+            emergency_facebook: document.getElementById('em-fb').value,
+            emergency_phone: document.getElementById('em-phone').value,
+            emergency_other: document.getElementById('em-other').value,
+            user_type: 'graduating',
+            verification_status: 'pending',
+            created_at: new Date().toISOString()
+          };
+
+          // Upload profile picture if selected
+          const pictureFile = document.getElementById('gi-picture').files[0];
+          let pictureUrl = null;
+          if (pictureFile) {
+            const fileExt = pictureFile.name.split('.').pop();
+            const fileName = `${Date.now()}.${fileExt}`;
+            const { data: uploadData, error: uploadError } = await supabase.storage
+              .from('profile-pictures')
+              .upload(fileName, pictureFile);
+            
+            if (uploadError) throw uploadError;
+            
+            const { data: { publicUrl } } = supabase.storage
+              .from('profile-pictures')
+              .getPublicUrl(fileName);
+            pictureUrl = publicUrl;
+          }
+
+          // Insert into profiles table
+          const { data, error } = await supabase
+            .from('profiles')
+            .insert([{
+              ...formData,
+              profile_picture: pictureUrl
+            }]);
+
+          if (error) throw error;
+
+          // Show success popup
+          const popup = document.getElementById('success-popup');
+          if(popup) popup.style.display = 'flex';
+          
+          // After 3 seconds, navigate to dashboard
+          setTimeout(() => {
+            window.location.href = 'dashboard1.html';
+          }, 3000);
+
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          alert('Error submitting form. Please try again.');
+        }
+      }
+    </script>
+    
+    <!-- Cool Success Popup -->
+    <div id="success-popup" class="success-popup">
+        <div class="success-popup-content">
+            <div class="success-icon"></div>
+            <h2 class="success-title">🎉 Congratulations!</h2>
+            <p class="success-message">
+                Your profile has been successfully submitted!<br>
+                You can now view your graduating dashboard with all your information.
+            </p>
+            <button class="success-button" onclick="closeSuccessPopup()">Continue</button>
+        </div>
+        <!-- Confetti Animation -->
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+    </div>
+</body>
+</html>
+
